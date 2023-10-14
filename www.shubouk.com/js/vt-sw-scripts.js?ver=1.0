@@ -1,0 +1,116 @@
+jQuery(document).ready(function($) {
+
+  // Open & Close
+  $('.vt-sw-trigger').on('click', function (e){
+    e.preventDefault();
+    $('.vt-style-switch').toggleClass('vt-sw-active');
+    $('html').addClass('bg-pattern');
+  });
+
+  var layAct = 'sw-active';
+
+  // Layout Style
+  $('.layout-wide').on('click', function (e){
+    e.preventDefault();
+    // Active for selected image
+    $('.sw-active').removeClass('sw-active');
+    $(this).addClass('sw-active');
+    // Container Class
+    $('body').addClass('layout-wide');
+    $('body').removeClass('layout-boxed');
+    // Dependency Option for Background Image
+    $( ".sw-bg-style" ).slideUp( "800" );
+  });
+
+  $('.roof-layout-boxed').on('click', function (e){
+    e.preventDefault();
+    // Active for selected image
+    $('.sw-active').removeClass('sw-active');
+    $(this).addClass('sw-active');
+    // Container Class
+    $('body').addClass('layout-boxed');
+    $('body').removeClass('layout-wide');
+    // Dependency Option for Background Image
+    $( ".sw-bg-style" ).slideDown( "800" );
+  });
+
+  // Select Menu - Classic & Modern
+  $('#trigger-menu-style').on('change', function () {
+    var url = $(this).val(); // get selected value
+    if (url) { // require a URL
+      window.location = url; // redirect
+    }
+    return false;
+  });
+
+  // Nice Select
+  $('#trigger-menu-style').niceSelect();
+
+  // Checkbox into Switcher
+  var switchSelector = document.querySelector('.roof-switcher'); // referred checkbox class is here
+  var mySwitcher = new Switchery(switchSelector,{
+    color             : '#fff',
+    secondaryColor    : '#fff',
+    jackColor         : '#24a3d8',
+    jackSecondaryColor: '#24a3d8',
+  });
+
+  // If it's checked addClass
+  $('.sw-switcher input:checkbox').on('change', function () {
+    if($(this).is(":checked")) {
+      $('.sw-switcher').addClass("opt-static");
+    } else {
+      $('.sw-switcher').removeClass("opt-static");
+    }
+  });
+
+  // On click enable/disable switcher checkbox
+  function setSwitchery(switchElement, checkedBool) {
+    if((checkedBool && !switchElement.isChecked()) || (!checkedBool && switchElement.isChecked())) {
+      switchElement.setPosition(true);
+      switchElement.handleOnchange(true);
+    }
+  }
+  $('.header-sticky-opt').on('click', function () {
+    setSwitchery(mySwitcher, false);
+  });
+  $('.header-static-opt').on('click', function () {
+    setSwitchery(mySwitcher, true);
+  });
+
+  // Navigation
+  $('.sw-switcher input:checkbox').on('change', function () {
+    if($(this).is(":checked")) {
+      $(".roof-header-sticky").unstick();
+    } else {
+      $(".roof-header-sticky").sticky({ topSpacing: 0 });
+    }
+  });
+  $('.header-sticky-opt').on('click', function () {
+    $(".roof-header-sticky").sticky({ topSpacing: 0 });
+  });
+  $('.header-static-opt').on('click', function () {
+    $(".roof-header-sticky").sticky({ topSpacing: 0 });
+    $(".roof-header-sticky").unstick();
+  });
+
+  // Color Skins
+  $('.sw-color-style > ul > li > a').on('click', function (e) {
+    e.preventDefault();
+    var dataColor = $(this).attr("data-color");
+    $('body').attr('id', dataColor);
+  });
+
+  // Background Image
+  $('.sw-bg-style > ul > li > a').on('click', function (e) {
+    e.preventDefault();
+    // Bg Image
+    var dataBg = $(this).attr("data-bg");
+    $('body').attr('style', 'background-image: url(' + dataBg + ');');
+
+    // Bg type
+    var dataType = $(this).attr("data-type");
+    $('html').addClass(dataType);
+  });
+
+});
